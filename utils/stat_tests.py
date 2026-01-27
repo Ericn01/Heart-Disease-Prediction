@@ -12,18 +12,15 @@ def test_categorical_independence(dataframe: pd.DataFrame,
     Perform chi-square test of independence for categorical variables.
     
     Parameters:
-    -----------
-    dataframe : pd.DataFrame
-        Input dataframe
-    var1, var2 : str
-        Categorical variables to test
+        dataframe (pd.DataFrame): Input dataframe
+        var1, var2 (str): Categorical variables to test
         
     Returns:
-    --------
-    dict : Test results including chi2, p-value, conclusion
+        result (dict): Test results including chi2, p-value, conclusion
     """
     contingency = pd.crosstab(dataframe[var1], dataframe[var2])
-    chi2, p_value, dof, expected = chi2_contingency(contingency)
+    chi2, p_value, dof = chi2_contingency(contingency)
+
     
     result = {
         'test': 'Chi-square',
@@ -32,9 +29,6 @@ def test_categorical_independence(dataframe: pd.DataFrame,
         'chi2_statistic': chi2,
         'p_value': p_value,
         'degrees_of_freedom': dof,
-        'significant_001': p_value < 0.001,
-        'significant_005': p_value < 0.05,
-        'significant_010': p_value < 0.10
     }
     
     return result
@@ -48,19 +42,13 @@ def test_numeric_across_groups(dataframe: pd.DataFrame,
     Test if numeric variable differs across groups.
     
     Parameters:
-    -----------
-    dataframe : pd.DataFrame
-        Input dataframe
-    numeric_var : str
-        Numeric variable to test
-    group_var : str
-        Grouping variable
-    test : str
-        'kruskal' for Kruskal-Wallis or 'anova' for one-way ANOVA
+        dataframe : pd.DataFrame Input dataframe
+        numeric_var : str Numeric variable to test
+        group_var (str): Grouping variable
+        test (str): 'kruskal' for Kruskal-Wallis or 'anova' for one-way ANOVA
         
     Returns:
-    --------
-    dict : Test results
+        result (dict): Test results
     """
     groups = [group[numeric_var].dropna() 
                 for name, group in dataframe.groupby(group_var)]
@@ -80,9 +68,6 @@ def test_numeric_across_groups(dataframe: pd.DataFrame,
         'group_variable': group_var,
         'statistic': stat,
         'p_value': p_value,
-        'significant_001': p_value < 0.001,
-        'significant_005': p_value < 0.05,
-        'significant_010': p_value < 0.10
     }
     
     return result
@@ -96,19 +81,13 @@ def compare_distributions_across_datasets(dataframes: list[pd.DataFrame],
     Compare feature distribution across multiple datasets.
     
     Parameters:
-    -----------
-    dataframes : list of pd.DataFrame
-        List of dataframes
-    dataset_names : list of str
-        Names of datasets
-    feature : str
-        Feature to compare
-    test_type : str
-        'auto', 'numeric', or 'categorical'
+        dataframes (list of pd.DataFrame): List of dataframes
+        dataset_names (list of str): Names of datasets
+        feature (str): Feature to compare
+        test_type (str): 'auto', 'numeric', or 'categorical'
         
     Returns:
-    --------
-    dict : Comparison results
+        result (dict): Comparison results
     """
     # Combine with dataset labels
     combined_data = []

@@ -51,27 +51,27 @@ def load_datasets(filepaths : list[str],
 def add_dataset_identifier (dataframes: list[pd.DataFrame], 
                             dataset_names: list[str],
                             column_name: str = "Dataset") -> list[pd.DataFrame]:
-        """
-        Add dataset identifier column to each dataframe.
-        
-        Parameters:
-            dataframes (list of pd.DataFrame): List of dataframes
-            dataset_names (list of str): Names to assign to each dataset
-            column_name (str): Name of the identifier column
-                
-        Returns:
-            list of pd.DataFrame : Dataframes with identifier column
-        """
+    """
+    Add dataset identifier column to each dataframe.
+    
+    Parameters:
+        dataframes (list of pd.DataFrame): List of dataframes
+        dataset_names (list of str): Names to assign to each dataset
+        column_name (str): Name of the identifier column
+            
+    Returns:
+        list of pd.DataFrame : Dataframes with identifier column
+    """
 
-        if len(dataframes) != len(dataset_names):
-            raise ValueError("Number of dataframes must match number of dataset names")
-        
-        modified_dfs = []
-        for df, name in zip(dataframes, dataset_names):
-            df_copy = df.copy()
-            df_copy[column_name] = name
-            modified_dfs.append(df_copy)
-        return modified_dfs
+    if len(dataframes) != len(dataset_names):
+        raise ValueError("Number of dataframes must match number of dataset names")
+    
+    modified_dfs = []
+    for df, name in zip(dataframes, dataset_names):
+        df_copy = df.copy()
+        df_copy[column_name] = name
+        modified_dfs.append(df_copy)
+    return modified_dfs
 
 
 def modify_column_names(dataframe: pd.DataFrame, 
