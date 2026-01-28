@@ -20,12 +20,12 @@ def calculate_missingness_summary(dataframe: pd.DataFrame) -> pd.DataFrame:
     missing_counts = dataframe.isnull().sum()
     missing_summary = pd.DataFrame({ 
         'Feature': dataframe.columns, 
-        'Missing Count': missing_counts.values, 
-        'Missing Percent': (missing_counts / len(dataframe) * 100).values
+        'Missing_Count': missing_counts.values, 
+        'Missing_Percent': (missing_counts / len(dataframe) * 100).values
     })
 
     missing_summary = missing_summary[missing_summary['Missing_Count'] > 0]
-    missing_summary = missing_summary.sort_values('Missing_Pct', ascending=False)
+    missing_summary = missing_summary.sort_values('Missing_Percent', ascending=False)
     missing_summary = missing_summary.reset_index(drop=True)
     
     return missing_summary
