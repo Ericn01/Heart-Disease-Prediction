@@ -17,6 +17,7 @@ def calculate_missingness_summary(dataframe: pd.DataFrame) -> pd.DataFrame:
     Returns:
         missing summary (pd.DataFrame): Summary of missing values.
     """
+    
     missing_counts = dataframe.isnull().sum()
     missing_summary = pd.DataFrame({ 
         'Feature': dataframe.columns, 

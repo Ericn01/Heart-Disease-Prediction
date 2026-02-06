@@ -9,6 +9,21 @@ This module was created for the loading process of the datasets to keep everythi
 """
 
 import pandas as pd
+import numpy as np
+
+def convert_question_mark_to_nan (dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    Instead of using NaN or null values to denote empty entries, the UCI Heart Disease datasets use a question mark (?) character. This can cause issues if not converted; as a result this function handles that. 
+    
+    Parameters:
+        dataframe (pd.Dataframe): The input dataframe 
+            
+    Returns:
+        dataframe (pd.DataFrame) : Dataframe with "?" characters replaced with NaN values 
+    """
+    modified_df = dataframe.replace("?", np.nan)
+    return modified_df
+
 
 def create_file_path (filename : str, 
                         directory: str = "data", 
@@ -124,7 +139,7 @@ def prepare_cvd_datasets(files: list[str],
                         dataset_names: list[str],
                         column_names: list[str],
                         directory: str = "data",
-                        file_prefix: str = "processed") -> pd.DataFrame:
+                        file_prefix: str = "processed") -> tuple[list[pd.DataFrame], pd.DataFrame]:
     """
     Complete workflow to load and prepare CVD datasets.
     
@@ -147,10 +162,13 @@ def prepare_cvd_datasets(files: list[str],
     # Assign column names
     dfs = [modify_column_names(df, column_names) for df in dfs]
     
+    # Replace "?" values with NaN
+    dfs = [convert_question_mark_to_nan(df) for df in dfs]
+
     # Add dataset identifiers
     dfs = add_dataset_identifier(dfs, dataset_names)
     
     # Combine
     df_combined = combine_datasets(dfs)
     
-    return df_combined
+    return dfs, df_combined
