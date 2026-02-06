@@ -40,7 +40,6 @@ def plot_missingness_heatmap(dataframe: pd.DataFrame,
     plt.tight_layout()
     
     plt.show()
-    
     plt.close()
 
 
