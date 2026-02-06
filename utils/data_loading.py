@@ -124,7 +124,7 @@ def prepare_cvd_datasets(files: list[str],
                         dataset_names: list[str],
                         column_names: list[str],
                         directory: str = "data",
-                        file_prefix: str = "processed") -> tuple[list[pd.DataFrame], pd.DataFrame]:
+                        file_prefix: str = "processed") -> pd.DataFrame:
     """
     Complete workflow to load and prepare CVD datasets.
     
@@ -153,4 +153,4 @@ def prepare_cvd_datasets(files: list[str],
     # Combine
     df_combined = combine_datasets(dfs)
     
-    return dfs, df_combined
+    return df_combined

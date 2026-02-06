@@ -9,7 +9,7 @@ COLUMN_NAMES = ["Age", "Sex", "Chest Pain", "Rest BP", "Chol", "FBS",
                 "Ca", "Thal", "CVD Class"]
 
 # We'll make the datasets global so that 
-dfs, df_combined = prepare_cvd_datasets(
+df_combined = prepare_cvd_datasets(
     files=FILES, 
     dataset_names=DATASET_NAMES,
     column_names=COLUMN_NAMES, 
