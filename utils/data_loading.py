@@ -134,6 +134,37 @@ def combine_datasets(dataframes: list[pd.DataFrame],
                             ignore_index=reset_index)
     return combined
 
+def apply_domain_cleaning(dataframe: pd.DataFrame) -> pd.DataFrame:
+    # Plausible ranges (screening thresholds; adjust if clinical context suggests otherwise)
+    range_checks = {
+        'Age': (0, 120),
+        'Rest BP': (80, 250),
+        'Chol': (50, 700),
+        'Max HR': (60, 220),
+        'Oldpeak': (0, 10),
+    }
+    df_copy = dataframe.copy()
+
+    for col, (min_val, max_val) in range_checks.items():
+        out_of_range = ((df_copy[col] < min_val) | (df_copy[col] > max_val) & df_copy[col].notnull())
+    return df_copy 
+
+
+def modify_datataset(dataframe: pd.DataFrame, column_names):
+    """
+    Docstring for modify_datataset
+    
+    Parameters:
+        dataframe: Description
+        :type dataframe: pd.DataFrame
+    Returns:
+        :param column_names: Description
+    """
+    df_copy = dataframe.copy()
+    df_modified = modify_column_names(df_copy, column_names)
+    df_modified = convert_question_mark_to_nan(df_modified)
+    df_modified = apply_domain_cleaning(df_modified)
+    return df_modified
 
 def prepare_cvd_datasets(files: list[str], 
                         dataset_names: list[str],
@@ -159,14 +190,8 @@ def prepare_cvd_datasets(files: list[str],
     # Load datasets
     dfs = load_datasets(filepaths)
     
-    # Assign column names
-    dfs = [modify_column_names(df, column_names) for df in dfs]
-    
-    # Replace "?" values with NaN
-    dfs = [convert_question_mark_to_nan(df) for df in dfs]
-
-    # Add dataset identifiers
-    dfs = add_dataset_identifier(dfs, dataset_names)
+    # Assign column names, Replace "?" values with NaN and convert impossible values to NaN
+    dfs = [modify_datataset(df, column_names) for df in dfs]
     
     # Combine
     df_combined = combine_datasets(dfs)
